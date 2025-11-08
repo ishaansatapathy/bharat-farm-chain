@@ -103,6 +103,17 @@ const Index = () => {
         </div>
       </section>
 
+      {/* AI CHATBOT SECTION - HERO PLACEMENT TEST */}
+      <div style={{backgroundColor: 'orange', color: 'white', fontSize: '40px', padding: '30px', border: '10px solid red', textAlign: 'center'}}>
+        🚨 AI CHATBOT SECTION - HERO PLACEMENT 🚨
+      </div>
+      <section style={{display: 'block !important', visibility: 'visible !important'}} className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 style={{color: 'red', fontSize: '50px', backgroundColor: 'yellow'}}>🤖 AI FARMING ASSISTANT - HERO POSITION</h2>
+          <p>This is a test to see if the AI chatbot section is visible when placed after the hero section</p>
+        </div>
+      </section>
+
       {/* Key Features Section */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
@@ -140,6 +151,102 @@ const Index = () => {
               <p className="text-muted-foreground">
                 Transparent market rates and direct connections eliminate middlemen
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI CHATBOT SECTION START - DEBUG MARKER */}
+      <div style={{display: 'block !important', visibility: 'visible !important', position: 'relative !important', zIndex: '9999 !important'}} className="text-center bg-red-500 text-white text-4xl font-bold p-8">
+        🔍 AI CHATBOT SECTION SHOULD BE VISIBLE HERE 🔍
+        <br />
+        <span className="text-2xl">If you see this, the section is rendering!</span>
+      </div>
+      
+      {/* ULTRA SIMPLE TEST */}
+      <div style={{backgroundColor: 'yellow', color: 'red', fontSize: '30px', padding: '20px', border: '5px solid black'}}>
+        ULTRA SIMPLE TEST - CAN YOU SEE THIS?
+      </div>
+      <section style={{display: 'block !important', visibility: 'visible !important', position: 'relative !important'}} className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12 space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+                <span className="text-sm font-medium text-primary">🤖 AI Assistant</span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-red-600 bg-yellow-200 p-4">🤖 AI FARMING ASSISTANT - DEBUG VISIBLE</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Get instant answers about crop selection, weather conditions, market prices, and farming best practices
+              </p>
+            </div>
+
+            <div className="bg-card rounded-2xl shadow-xl border p-6 md:p-8">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-bold text-foreground">How can I help you today?</h3>
+                    <p className="text-muted-foreground">
+                      Ask me anything about farming - from crop recommendations to pest control, 
+                      weather forecasts to market insights. I'm here to help 24/7!
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                      <span className="text-sm text-muted-foreground">"What crops should I plant this season?"</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                      <span className="text-sm text-muted-foreground">"When is the best time to harvest wheat?"</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                      <span className="text-sm text-muted-foreground">"What's the current market price for tomatoes?"</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                      <span className="text-sm text-muted-foreground">"How do I treat fungal infections in my crops?"</span>
+                    </div>
+                  </div>
+
+                  <Button size="lg" className="w-full">
+                    Chat with AI Assistant
+                  </Button>
+                </div>
+
+                <div className="bg-muted/50 rounded-xl p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-lg">🤖</span>
+                      </div>
+                      <div>
+                        <p className="font-medium">KisanConnect AI</p>
+                        <p className="text-xs text-muted-foreground">Always online</p>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-background rounded-lg p-4 border">
+                      <p className="text-sm text-muted-foreground mb-2">Hello! I'm your AI farming assistant. I can help you with:</p>
+                      <ul className="text-xs text-muted-foreground space-y-1">
+                        <li>• Crop selection and planting guidance</li>
+                        <li>• Weather and climate insights</li>
+                        <li>• Pest and disease management</li>
+                        <li>• Market price information</li>
+                        <li>• Government scheme details</li>
+                      </ul>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <div className="flex-1 bg-background rounded-lg px-3 py-2 border">
+                        <p className="text-xs text-muted-foreground">Type your message...</p>
+                      </div>
+                      <Button size="sm" className="px-4">Send</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

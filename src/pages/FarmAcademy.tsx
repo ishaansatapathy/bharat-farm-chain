@@ -11,6 +11,7 @@ import {
   FileText,
   Users,
   Award,
+  MessageSquare,
   TrendingUp,
   Sprout,
   Droplets,
@@ -30,12 +31,14 @@ import {
   FileCheck,
   Shield,
 } from "lucide-react";
+import Chatbot from "@/components/ui/chatbot";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const FarmAcademy = () => {
   const navigate = useNavigate();
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
+  const [openChatbot, setOpenChatbot] = useState(false);
   
   // Get detailed information for each feature
   const getFeatureDetails = (featureTitle: string) => {
@@ -273,6 +276,11 @@ const FarmAcademy = () => {
       title: "Expert Support",
       description: "Live Q&A with agriculture experts",
     },
+      {
+        icon: MessageSquare,
+        title: "Chatbot",
+        description: "AI-powered farming assistant",
+      },
     {
       icon: Award,
       title: "Certificates",
@@ -341,16 +349,18 @@ const FarmAcademy = () => {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature) => (
+                  {features.map((feature) => (
               <Card 
                 key={feature.title} 
                 className="border-orange-100 bg-white p-6 shadow-sm transition-all hover:shadow-md cursor-pointer hover:border-orange-500 group"
                 onClick={() => {
-                  if (feature.title === "Expert Support") {
-                    navigate("/farm-academy/expert-qa");
-                  } else {
-                    setSelectedFeature(feature.title);
-                  }
+                      if (feature.title === "Expert Support") {
+                        navigate("/farm-academy/expert-qa");
+                      } else if (feature.title === "Chatbot") {
+                        setOpenChatbot(true);
+                      } else {
+                        setSelectedFeature(feature.title);
+                      }
                 }}
               >
                 <div className="flex items-start gap-4">
@@ -370,6 +380,8 @@ const FarmAcademy = () => {
                         e.stopPropagation();
                         if (feature.title === "Expert Support") {
                           navigate("/farm-academy/expert-qa");
+                        } else if (feature.title === "Chatbot") {
+                          setOpenChatbot(true);
                         } else {
                           setSelectedFeature(feature.title);
                         }
@@ -647,6 +659,9 @@ const FarmAcademy = () => {
           })()}
         </DialogContent>
       </Dialog>
+
+  {/* Chatbot widget */}
+  <Chatbot open={openChatbot} onOpenChange={setOpenChatbot} />
 
       <Footer />
     </div>
