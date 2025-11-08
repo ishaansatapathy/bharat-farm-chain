@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   GraduationCap,
   BookOpen,
@@ -21,11 +23,185 @@ import {
   Star,
   CheckCircle2,
   Sparkles,
+  X,
+  ExternalLink,
+  Download,
+  Languages,
+  FileCheck,
+  Shield,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const FarmAcademy = () => {
+  const navigate = useNavigate();
+  const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
+  
+  // Get detailed information for each feature
+  const getFeatureDetails = (featureTitle: string) => {
+    const details: Record<string, {
+      title: string;
+      description: string;
+      videos?: Array<{ title: string; url: string; duration: string; language: string }>;
+      studyMaterials?: Array<{ title: string; type: string; downloadUrl: string; description: string }>;
+      certificateRequirements?: Array<{ course: string; requirements: string[]; certificateType: string }>;
+    }> = {
+      "Video Lessons": {
+        title: "Video Lessons",
+        description: "Watch expert-led farming tutorials in Hindi, English, and Kannada. Learn practical techniques through step-by-step video demonstrations.",
+        videos: [
+          {
+            title: "Modern Farming Techniques - Complete Guide",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "45 min",
+            language: "Hindi"
+          },
+          {
+            title: "Organic Farming Methods for Beginners",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "32 min",
+            language: "English"
+          },
+          {
+            title: "Soil Testing and Management",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "28 min",
+            language: "Kannada"
+          },
+          {
+            title: "Drip Irrigation System Setup",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "25 min",
+            language: "Hindi"
+          },
+          {
+            title: "Pest and Disease Control",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "38 min",
+            language: "English"
+          },
+          {
+            title: "Crop Rotation Planning",
+            url: "https://www.youtube.com/embed/9bZkp7q19f0",
+            duration: "20 min",
+            language: "Kannada"
+          }
+        ]
+      },
+      "Study Materials": {
+        title: "Study Materials",
+        description: "Download comprehensive farming guides, PDFs, and reference materials to enhance your learning.",
+        studyMaterials: [
+          {
+            title: "Complete Guide to Modern Farming",
+            type: "PDF Guide",
+            downloadUrl: "#",
+            description: "Comprehensive 150-page guide covering all aspects of modern farming techniques, crop management, and best practices."
+          },
+          {
+            title: "Soil Health Management Manual",
+            type: "PDF Manual",
+            downloadUrl: "#",
+            description: "Detailed manual on soil testing, nutrient management, pH balancing, and organic matter improvement."
+          },
+          {
+            title: "Crop Calendar 2024",
+            type: "PDF Calendar",
+            downloadUrl: "#",
+            description: "Month-by-month crop planning calendar with sowing dates, harvesting periods, and seasonal recommendations."
+          },
+          {
+            title: "Pest & Disease Identification Chart",
+            type: "PDF Chart",
+            downloadUrl: "#",
+            description: "Visual identification guide for common pests and diseases with treatment recommendations and prevention methods."
+          },
+          {
+            title: "Fertilizer Application Guide",
+            type: "PDF Guide",
+            downloadUrl: "#",
+            description: "Complete guide on NPK fertilizers, organic fertilizers, application methods, and dosage calculations."
+          },
+          {
+            title: "Irrigation Systems Handbook",
+            type: "PDF Handbook",
+            downloadUrl: "#",
+            description: "Technical handbook covering drip irrigation, sprinkler systems, water management, and installation guides."
+          },
+          {
+            title: "Organic Farming Certification Guide",
+            type: "PDF Guide",
+            downloadUrl: "#",
+            description: "Step-by-step guide to organic farming certification, requirements, and compliance standards."
+          },
+          {
+            title: "Market Price Trends & Analysis",
+            type: "PDF Report",
+            downloadUrl: "#",
+            description: "Monthly market analysis report with crop prices, demand trends, and selling strategies."
+          }
+        ]
+      },
+      "Certificates": {
+        title: "Certificates",
+        description: "Earn verified certificates upon completing courses. Each course has specific requirements that must be met to receive your certificate.",
+        certificateRequirements: [
+          {
+            course: "Modern Farming Techniques",
+            requirements: [
+              "Complete all 12 video lessons",
+              "Pass final assessment with 70% or higher",
+              "Submit practical assignment",
+              "Complete course within 4 weeks"
+            ],
+            certificateType: "Course Completion Certificate"
+          },
+          {
+            course: "Soil Health Management",
+            requirements: [
+              "Complete all 10 video lessons",
+              "Pass all module quizzes",
+              "Submit soil analysis report",
+              "Complete course within 3 weeks"
+            ],
+            certificateType: "Specialization Certificate"
+          },
+          {
+            course: "Pest & Disease Control",
+            requirements: [
+              "Complete all 8 video lessons",
+              "Pass identification test",
+              "Submit case study",
+              "Complete course within 2 weeks"
+            ],
+            certificateType: "Course Completion Certificate"
+          },
+          {
+            course: "Climate-Smart Agriculture",
+            requirements: [
+              "Complete all 15 video lessons",
+              "Pass advanced assessment with 80% or higher",
+              "Submit research project",
+              "Complete course within 5 weeks"
+            ],
+            certificateType: "Advanced Certificate"
+          },
+          {
+            course: "Complete Farm Academy Program",
+            requirements: [
+              "Complete all 4 courses",
+              "Earn all individual course certificates",
+              "Pass comprehensive final exam",
+              "Submit final project"
+            ],
+            certificateType: "Master Farmer Certificate"
+          }
+        ]
+      }
+    };
+    return details[featureTitle] || null;
+  };
+  
   const courses = [
     {
       id: 1,
@@ -166,14 +342,41 @@ const FarmAcademy = () => {
         <div className="container mx-auto px-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
-              <Card key={feature.title} className="border-orange-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+              <Card 
+                key={feature.title} 
+                className="border-orange-100 bg-white p-6 shadow-sm transition-all hover:shadow-md cursor-pointer hover:border-orange-500 group"
+                onClick={() => {
+                  if (feature.title === "Expert Support") {
+                    navigate("/farm-academy/expert-qa");
+                  } else {
+                    setSelectedFeature(feature.title);
+                  }
+                }}
+              >
                 <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-orange-100 p-3 text-orange-600">
+                  <div className="rounded-lg bg-orange-100 p-3 text-orange-600 group-hover:bg-orange-200 transition-colors">
                     <feature.icon className="h-5 w-5" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{feature.title}</h3>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-foreground group-hover:text-orange-600 transition-colors">{feature.title}</h3>
+                      <ArrowRight className="h-4 w-4 text-orange-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                     <p className="mt-1 text-xs text-muted-foreground">{feature.description}</p>
+                    <Button 
+                      size="sm" 
+                      className="mt-3 bg-orange-500 hover:bg-orange-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (feature.title === "Expert Support") {
+                          navigate("/farm-academy/expert-qa");
+                        } else {
+                          setSelectedFeature(feature.title);
+                        }
+                      }}
+                    >
+                      {feature.title === "Expert Support" ? "Get Started" : "Learn More"}
+                    </Button>
                   </div>
                 </div>
               </Card>
@@ -282,6 +485,168 @@ const FarmAcademy = () => {
           </Card>
         </div>
       </section>
+
+      {/* Feature Details Dialog */}
+      <Dialog open={selectedFeature !== null} onOpenChange={(open) => !open && setSelectedFeature(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedFeature && (() => {
+            const details = getFeatureDetails(selectedFeature);
+            if (!details) return null;
+            
+            return (
+              <>
+                <DialogHeader>
+                  <div className="flex items-center justify-between">
+                    <DialogTitle className="text-2xl font-extrabold text-foreground flex items-center gap-3">
+                      {details.title}
+                    </DialogTitle>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setSelectedFeature(null)}
+                      className="rounded-full"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <DialogDescription className="text-base text-foreground/80 mt-2">
+                    {details.description}
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 mt-6">
+                  {/* Video Lessons Content */}
+                  {details.videos && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                        <Video className="h-5 w-5 text-orange-600" />
+                        Available Video Lessons
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {details.videos.map((video, idx) => (
+                          <div key={idx} className="bg-white rounded-lg border-2 border-orange-200/60 overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                            <div className="aspect-video bg-black">
+                              <iframe
+                                src={video.url}
+                                title={video.title}
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              ></iframe>
+                            </div>
+                            <div className="p-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <Badge className="bg-orange-100 text-orange-700 border-orange-300">
+                                  <Languages className="h-3 w-3 mr-1" />
+                                  {video.language}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {video.duration}
+                                </span>
+                              </div>
+                              <h4 className="font-semibold text-foreground text-sm">{video.title}</h4>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Study Materials Content */}
+                  {details.studyMaterials && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-orange-600" />
+                        Downloadable Study Materials
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {details.studyMaterials.map((material, idx) => (
+                          <Card key={idx} className="p-4 border-2 border-orange-200/60 hover:border-orange-300 transition-colors">
+                            <div className="flex items-start gap-3">
+                              <div className="bg-orange-100 p-2 rounded-lg">
+                                <FileText className="h-5 w-5 text-orange-600" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                  <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-xs">
+                                    {material.type}
+                                  </Badge>
+                                </div>
+                                <h4 className="font-semibold text-foreground text-sm mb-2">{material.title}</h4>
+                                <p className="text-xs text-muted-foreground mb-3">{material.description}</p>
+                                <Button
+                                  size="sm"
+                                  className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                                  onClick={() => {
+                                    // In a real app, this would trigger the download
+                                    alert(`Downloading ${material.title}...`);
+                                  }}
+                                >
+                                  <Download className="h-3 w-3 mr-2" />
+                                  Download PDF
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Certificate Requirements Content */}
+                  {details.certificateRequirements && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                        <Award className="h-5 w-5 text-orange-600" />
+                        Certificate Requirements
+                      </h3>
+                      <div className="space-y-4">
+                        {details.certificateRequirements.map((cert, idx) => (
+                          <Card key={idx} className="p-5 border-2 border-orange-200/60">
+                            <div className="flex items-start gap-4">
+                              <div className="bg-orange-100 p-3 rounded-lg">
+                                <Award className="h-6 w-6 text-orange-600" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-2">
+                                  <h4 className="font-bold text-foreground text-base">{cert.course}</h4>
+                                  <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300">
+                                    {cert.certificateType}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-muted-foreground mb-3">Complete the following to earn your certificate:</p>
+                                <div className="space-y-2">
+                                  {cert.requirements.map((req, reqIdx) => (
+                                    <div key={reqIdx} className="flex items-start gap-2 p-2 bg-orange-50/50 rounded-lg">
+                                      <CheckCircle2 className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                                      <span className="text-sm text-foreground/80 font-medium">{req}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <Button
+                                  size="sm"
+                                  className="mt-4 bg-orange-500 hover:bg-orange-600 text-white"
+                                  onClick={() => {
+                                    navigate("/farm-academy");
+                                  }}
+                                >
+                                  Start Course
+                                  <ArrowRight className="h-3 w-3 ml-2" />
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

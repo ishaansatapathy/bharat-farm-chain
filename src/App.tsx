@@ -29,6 +29,7 @@ import VendorDashboard from "./pages/vendor/Dashboard";
 import BuyerLogin from "./pages/buyer/Login";
 import BuyerDashboard from "./pages/buyer/Dashboard";
 import BuyerCheckout from "./pages/buyer/Checkout";
+import ExpertQA from "./pages/ExpertQA";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
             <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/farm-academy" element={<FarmAcademy />} />
+          <Route path="/farm-academy/expert-qa" element={<ExpertQA />} />
           <Route path="/farmer" element={<Navigate to="/farmer/login" replace />} />
           <Route path="/farmer/login" element={<FarmerLogin />} />
           <Route path="/farmer/dashboard" element={<ProtectedRoute role="farmer"><Farmer /></ProtectedRoute>} />

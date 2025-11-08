@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Star, 
   MapPin, 
@@ -21,6 +23,8 @@ import {
   Sparkles,
   AlertCircle,
   Calendar,
+  X,
+  Check,
 } from "lucide-react";
 import FarmerPageShell from "./FarmerPageShell";
 
@@ -53,6 +57,159 @@ const vendors = [
     summary: "Implements for rent, drip kits, and on-call repairs.",
   },
 ];
+
+// Product data for each vendor
+const vendorProducts: Record<string, Array<{
+  id: string;
+  name: string;
+  price: number;
+  unit: string;
+  stock: string;
+  description: string;
+  category: string;
+}>> = {
+  "VND-2201": [
+    {
+      id: "PRD-001",
+      name: "Hybrid Tomato Seeds",
+      price: 450,
+      unit: "per packet (100g)",
+      stock: "In Stock",
+      description: "High-yield hybrid tomato seeds with 95% germination rate",
+      category: "Seeds"
+    },
+    {
+      id: "PRD-002",
+      name: "Urea Fertilizer",
+      price: 850,
+      unit: "per bag (50kg)",
+      stock: "In Stock",
+      description: "Premium quality urea fertilizer for nitrogen enrichment",
+      category: "Fertilisers"
+    },
+    {
+      id: "PRD-003",
+      name: "DAP Fertilizer",
+      price: 1200,
+      unit: "per bag (50kg)",
+      stock: "In Stock",
+      description: "Di-Ammonium Phosphate for phosphorus and nitrogen",
+      category: "Fertilisers"
+    },
+    {
+      id: "PRD-004",
+      name: "Organic Compost",
+      price: 350,
+      unit: "per bag (25kg)",
+      stock: "In Stock",
+      description: "100% organic compost for soil health improvement",
+      category: "Fertilisers"
+    },
+    {
+      id: "PRD-005",
+      name: "Wheat Seeds (Premium)",
+      price: 2800,
+      unit: "per quintal",
+      stock: "Limited Stock",
+      description: "Certified premium wheat seeds with high yield potential",
+      category: "Seeds"
+    },
+  ],
+  "VND-2202": [
+    {
+      id: "PRD-006",
+      name: "Neem Oil Pesticide",
+      price: 450,
+      unit: "per liter",
+      stock: "In Stock",
+      description: "Organic neem oil pesticide for pest control",
+      category: "Pesticides"
+    },
+    {
+      id: "PRD-007",
+      name: "Insecticide Spray",
+      price: 380,
+      unit: "per bottle (500ml)",
+      stock: "In Stock",
+      description: "Effective insecticide for crop protection",
+      category: "Pesticides"
+    },
+    {
+      id: "PRD-008",
+      name: "Fungicide Solution",
+      price: 520,
+      unit: "per liter",
+      stock: "In Stock",
+      description: "Broad-spectrum fungicide for disease prevention",
+      category: "Pesticides"
+    },
+    {
+      id: "PRD-009",
+      name: "Herbicide (Weed Control)",
+      price: 650,
+      unit: "per liter",
+      stock: "In Stock",
+      description: "Selective herbicide for weed management",
+      category: "Pesticides"
+    },
+    {
+      id: "PRD-010",
+      name: "Field Consultation Service",
+      price: 1500,
+      unit: "per visit",
+      stock: "Available",
+      description: "Expert field consultation for crop management",
+      category: "Advisory"
+    },
+  ],
+  "VND-2203": [
+    {
+      id: "PRD-011",
+      name: "Drip Irrigation Kit",
+      price: 15000,
+      unit: "per set (1 acre)",
+      stock: "In Stock",
+      description: "Complete drip irrigation system with installation support",
+      category: "Tools & Rentals"
+    },
+    {
+      id: "PRD-012",
+      name: "Tractor Rental (Daily)",
+      price: 2500,
+      unit: "per day",
+      stock: "Available",
+      description: "Tractor rental with driver for field operations",
+      category: "Tools & Rentals"
+    },
+    {
+      id: "PRD-013",
+      name: "Plough Rental",
+      price: 800,
+      unit: "per day",
+      stock: "Available",
+      description: "Heavy-duty plough for soil preparation",
+      category: "Tools & Rentals"
+    },
+    {
+      id: "PRD-014",
+      name: "Harvester Rental",
+      price: 5000,
+      unit: "per day",
+      stock: "Available",
+      description: "Combine harvester for efficient crop harvesting",
+      category: "Tools & Rentals"
+    },
+    {
+      id: "PRD-015",
+      name: "Repair Service",
+      price: 500,
+      unit: "per call",
+      stock: "Available",
+      description: "On-call repair service for farm equipment",
+      category: "Tools & Rentals"
+    },
+  ],
+};
 
 // Recent orders data
 const recentOrders = [
@@ -104,6 +261,31 @@ const aiRecommendations = [
 ];
 
 const FarmerVendorHub = () => {
+  const [requestedVendors, setRequestedVendors] = useState<Set<string>>(new Set());
+  const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
+  const [isProductDialogOpen, setIsProductDialogOpen] = useState(false);
+
+  const handleRequestContact = (vendorId: string) => {
+    setRequestedVendors(prev => new Set(prev).add(vendorId));
+    // Show success message or notification
+    setTimeout(() => {
+      // You can add a toast notification here
+    }, 100);
+  };
+
+  const handleViewProducts = (vendorId: string) => {
+    setSelectedVendor(vendorId);
+    setIsProductDialogOpen(true);
+  };
+
+  const getVendorProducts = (vendorId: string) => {
+    return vendorProducts[vendorId] || [];
+  };
+
+  const getVendorName = (vendorId: string) => {
+    return vendors.find(v => v.id === vendorId)?.name || "Vendor";
+  };
+
   return (
     <FarmerPageShell
       title="Vendor Hub"
@@ -186,12 +368,33 @@ const FarmerVendorHub = () => {
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="inline-flex items-center gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="inline-flex items-center gap-2"
+                              onClick={() => handleViewProducts(vendor.id)}
+                            >
                               <ShoppingBag className="h-4 w-4" />
                               View Products
                             </Button>
-                            <Button className="bg-farmer hover:bg-farmer/90" size="sm">
-                              Request Contact
+                            <Button 
+                              className={`${
+                                requestedVendors.has(vendor.id) 
+                                  ? "bg-emerald-600 hover:bg-emerald-700" 
+                                  : "bg-farmer hover:bg-farmer/90"
+                              }`}
+                              size="sm"
+                              onClick={() => handleRequestContact(vendor.id)}
+                              disabled={requestedVendors.has(vendor.id)}
+                            >
+                              {requestedVendors.has(vendor.id) ? (
+                                <>
+                                  <Check className="h-4 w-4 mr-1" />
+                                  Request Sent
+                                </>
+                              ) : (
+                                "Request Contact"
+                              )}
                             </Button>
                           </div>
                         </div>
@@ -349,6 +552,79 @@ const FarmerVendorHub = () => {
           </Card>
         </div>
       </div>
+
+      {/* Products Dialog */}
+      <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 text-farmer" />
+              Products - {selectedVendor && getVendorName(selectedVendor)}
+            </DialogTitle>
+            <DialogDescription>
+              Browse available products from this vendor
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedVendor && (
+            <div className="space-y-4 mt-4">
+              {getVendorProducts(selectedVendor).length > 0 ? (
+                <div className="grid gap-4">
+                  {getVendorProducts(selectedVendor).map((product) => (
+                    <Card key={product.id} className="border-border bg-white/95 p-4 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h4 className="font-semibold text-foreground text-lg">{product.name}</h4>
+                              <p className="text-sm text-muted-foreground mt-1">{product.description}</p>
+                            </div>
+                            <Badge className={`ml-2 ${
+                              product.stock === "In Stock" || product.stock === "Available" 
+                                ? "bg-emerald-100 text-emerald-700" 
+                                : "bg-amber-100 text-amber-700"
+                            }`}>
+                              {product.stock}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 mt-3">
+                            <div>
+                              <span className="text-2xl font-bold text-farmer">₹{product.price.toLocaleString()}</span>
+                              <span className="text-sm text-muted-foreground ml-1">{product.unit}</span>
+                            </div>
+                            <Badge variant="outline" className="border-farmer/30 text-farmer">
+                              {product.category}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 md:flex-col">
+                          <Button 
+                            className="bg-farmer hover:bg-farmer/90"
+                            size="sm"
+                          >
+                            Add to Cart
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No products available from this vendor</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </FarmerPageShell>
   );
 };
