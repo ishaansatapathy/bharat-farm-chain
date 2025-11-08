@@ -11,7 +11,7 @@ const Header = () => {
           <span className="text-xl font-bold text-foreground">KisanConnect</span>
         </Link>
         
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="flex items-center gap-6">
           <Link to="/farmer" className="text-sm font-medium text-foreground/80 hover:text-farmer transition-colors">
             For Farmers
           </Link>
@@ -22,15 +22,6 @@ const Header = () => {
             For Buyers
           </Link>
         </nav>
-
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm">
-            Login
-          </Button>
-          <Button size="sm" className="hidden sm:flex">
-            Get Started
-          </Button>
-        </div>
       </div>
     </header>
   );
